@@ -8,7 +8,7 @@ function cleanNumber(value) {
     return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-// Function to add the dollar sign and commas dynamically for currency fields
+// Function to format input fields with dollar sign and commas
 function formatCurrencyInput(inputField) {
     inputField.addEventListener('input', function () {
         let cleanValue = cleanNumber(inputField.value);
@@ -20,7 +20,7 @@ function formatCurrencyInput(inputField) {
     });
 }
 
-// Function to handle percentage input and ensure % stays at the start
+// Function to format percentage input field
 function formatPercentageInput(inputField) {
     inputField.addEventListener('input', function () {
         let cleanValue = cleanNumber(inputField.value);
