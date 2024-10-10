@@ -78,9 +78,28 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     // Show the Copy Button and assign the clean discount value (with 2 decimal places)
     copyButton.style.display = 'inline-block'; // Ensure the button is visible
     copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
+
+    // Show the Clear button when Copy button is visible
+    document.getElementById('clearButton').style.display = 'block';
 });
 
-// Function to show the notification for a set duration
+// Copy functionality when button is clicked
+document.getElementById('copyButton').addEventListener('click', function () {
+    const discountValue = this.getAttribute('data-discount'); // Get the stored discount value with 2 decimal places
+
+    // Create a temporary text area to copy the value
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = discountValue;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextArea);
+
+    // Show the notification with the copied message
+    showNotification(`Discount value copied: ${discountValue}`);
+});
+
+// Show notification function
 function showNotification(message, duration = 3000) {
     const notification = document.getElementById('notification');
     notification.textContent = message; // Set the message
@@ -94,18 +113,13 @@ function showNotification(message, duration = 3000) {
     }, duration);
 }
 
-// Copy functionality when the copy button is clicked
-document.getElementById('copyButton').addEventListener('click', function () {
-    const discountValue = this.getAttribute('data-discount'); // Get the stored discount value
-
-    // Create a temporary text area to copy the value
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = discountValue;
-    document.body.appendChild(tempTextArea);
-    tempTextArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempTextArea);
-
-    // Show the notification with the copied message
-    showNotification(`Discount value copied: ${discountValue}`);
+// Clear all inputs and results
+document.getElementById('clearButton').addEventListener('click', function () {
+    document.getElementById('inputRevenue').value = '';
+    document.getElementById('inputCost').value = '';
+    document.getElementById('inputPercentage').value = '';
+    document.getElementById('resultAdjustedRevenue').textContent = '';
+    document.getElementById('resultChange').textContent = '';
+    document.getElementById('copyButton').style.display = 'none'; // Hide Copy button again
+    this.style.display = 'none'; // Hide Clear button itself
 });
