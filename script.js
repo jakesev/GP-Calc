@@ -8,35 +8,29 @@ function cleanNumber(value) {
     return value.replace(/[$,%]/g, '').replace(/,/g, '');
 }
 
-// Function to add currency or percentage sign dynamically to inputs
-function formatWithSymbol(inputField, symbol) {
+// Function to add currency sign dynamically to inputs
+function addCurrencySymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
-        let cleanValue = cleanNumber(inputField.value); // Clean any symbols before reapplying
-        if (!isNaN(cleanValue) && cleanValue !== '') {
-            inputField.value = symbol + formatNumberWithCommas(cleanValue);
+        let value = cleanNumber(inputField.value); // Clean any symbols before reapplying
+        if (!isNaN(value) && value !== '') {
+            inputField.value = symbol + formatNumberWithCommas(value);
         } else {
-            inputField.value = symbol; // Reset to just the symbol if empty
+            inputField.value = symbol; // Reset if empty or invalid
         }
     });
 }
 
-// Adding dollar symbol and comma formatting for Revenue and Cost fields
-formatWithSymbol(document.getElementById('inputRevenue'), '$');
-formatWithSymbol(document.getElementById('inputCost'), '$');
+// Applying dollar sign and comma separator for Revenue and Cost inputs
+addCurrencySymbol(document.getElementById('inputRevenue'), '$');
+addCurrencySymbol(document.getElementById('inputCost'), '$');
 
-// Handling the GP% input field so that % stays at the start
+// Applying percentage symbol for GP % input
 document.getElementById('inputPercentage').addEventListener('input', function () {
-    let inputField = document.getElementById('inputPercentage');
-    let cleanValue = cleanNumber(inputField.value); // Remove % and commas
-
-    // Apply % at the start, and prevent it from moving
-    if (!isNaN(cleanValue) && cleanValue !== '') {
-        inputField.value = cleanValue;
-        // Keep the cursor at the right position (right after the number)
-        inputField.setSelectionRange(inputField.value.length, inputField.value.length);
+    let value = cleanNumber(document.getElementById('inputPercentage').value);
+    if (!isNaN(value) && value !== '') {
+        document.getElementById('inputPercentage').value ='%'+ value ;
     } else {
-        inputField.value = '%'; // Reset to just the percentage symbol
-        inputField.setSelectionRange(1, 1); // Keep cursor right after %
+        document.getElementById('inputPercentage').value = '';
     }
 });
 
