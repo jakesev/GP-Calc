@@ -65,6 +65,8 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     document.getElementById('resultAdjustedRevenue').textContent = `Adjusted Revenue: ${formatCurrency(adjustedRevenue)}`;
 
     // Display change result
+    const copyButton = document.getElementById('copyButton'); // Copy button reference
+
     if (change > 0) {
         document.getElementById('resultChange').textContent = `Increase by: ${formatCurrency(change)}`;
     } else if (change < 0) {
@@ -73,23 +75,22 @@ document.getElementById('calculateButton').addEventListener('click', function ()
         document.getElementById('resultChange').textContent = 'No adjustment needed';
     }
 
-    // Show Copy Button and Assign the Clean Discount Value
-    const copyButton = document.getElementById('copyButton');
-    copyButton.style.display = 'inline-block'; // Show the button
-    copyButton.value = cleanNumber(change.toString()); // Store the clean value without symbols or commas
+    // Show the Copy Button and assign the clean discount value (with 2 decimal places)
+    copyButton.style.display = 'inline-block'; // Ensure the button is visible
+    copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
 });
 
-// Copy Functionality
+// Copy functionality when button is clicked
 document.getElementById('copyButton').addEventListener('click', function () {
-    const cleanValue = this.value;
-    
+    const discountValue = this.getAttribute('data-discount'); // Get the stored discount value with 2 decimal places
+
     // Create a temporary text area to copy the value
     const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = cleanValue;
+    tempTextArea.value = discountValue;
     document.body.appendChild(tempTextArea);
     tempTextArea.select();
     document.execCommand('copy');
     document.body.removeChild(tempTextArea);
 
-    alert('Discount value copied: ' + cleanValue);
+    alert('Discount value copied: ' + discountValue);
 });
