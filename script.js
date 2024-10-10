@@ -1,27 +1,48 @@
+// Function to format numbers with commas
+function formatNumberWithCommas(value) {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // Function to remove any non-numeric characters except the decimal point
 function cleanNumber(value) {
-    // Remove any characters that are not digits or a single decimal point
     return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-// Function to add input validation on keyup to ensure only numbers and decimal points are allowed
-function validateNumericInput(inputField) {
+// Function to add the dollar sign and commas dynamically for currency fields
+function formatCurrencyInput(inputField) {
     inputField.addEventListener('input', function () {
         let cleanValue = cleanNumber(inputField.value);
-        inputField.value = cleanValue; // Update the input field with the cleaned value
+        if (cleanValue !== '') {
+            inputField.value = '$' + formatNumberWithCommas(cleanValue);
+        } else {
+            inputField.value = '$'; // Reset to just the dollar sign if empty
+        }
     });
 }
 
-// Apply validation to the input fields
-validateNumericInput(document.getElementById('inputRevenue'));
-validateNumericInput(document.getElementById('inputCost'));
-validateNumericInput(document.getElementById('inputPercentage'));
+// Function to handle percentage input and ensure % stays at the start
+function formatPercentageInput(inputField) {
+    inputField.addEventListener('input', function () {
+        let cleanValue = cleanNumber(inputField.value);
+        if (cleanValue !== '') {
+            inputField.value = '%' + cleanValue;
+            inputField.setSelectionRange(inputField.value.length, inputField.value.length);
+        } else {
+            inputField.value = '%'; // Reset to just the percentage symbol if empty
+        }
+    });
+}
+
+// Apply formatting to the input fields
+formatCurrencyInput(document.getElementById('inputRevenue'));
+formatCurrencyInput(document.getElementById('inputCost'));
+formatPercentageInput(document.getElementById('inputPercentage'));
 
 // Calculation function
 document.getElementById('calculateButton').addEventListener('click', function () {
-    const revenue = parseFloat(document.getElementById('inputRevenue').value);
-    const cost = parseFloat(document.getElementById('inputCost').value);
-    const percentage = parseFloat(document.getElementById('inputPercentage').value);
+    const revenue = parseFloat(cleanNumber(document.getElementById('inputRevenue').value));
+    const cost = parseFloat(cleanNumber(document.getElementById('inputCost').value));
+    const percentage = parseFloat(cleanNumber(document.getElementById('inputPercentage').value));
 
     if (isNaN(revenue) || isNaN(cost) || isNaN(percentage)) {
         alert('Please enter valid numbers');
@@ -65,7 +86,7 @@ document.getElementById('copyButton').addEventListener('click', function () {
     const discountValue = this.getAttribute('data-discount'); // Get the stored discount value with 2 decimal places
 
     // Create a temporary text area to copy the value
-       const tempTextArea = document.createElement('textarea');
+    const tempTextArea = document.createElement('textarea');
     tempTextArea.value = discountValue;
     document.body.appendChild(tempTextArea);
     tempTextArea.select();
@@ -92,9 +113,9 @@ function showNotification(message, duration = 3000) {
 
 // Clear all inputs and results
 document.getElementById('clearButton').addEventListener('click', function () {
-    document.getElementById('inputRevenue').value = '';
-    document.getElementById('inputCost').value = '';
-    document.getElementById('inputPercentage').value = '';
+    document.getElementById('inputRevenue').value = '$';
+    document.getElementById('inputCost').value = '$';
+    document.getElementById('inputPercentage').value = '%';
     document.getElementById('resultAdjustedRevenue').textContent = '';
     document.getElementById('resultChange').textContent = '';
     document.getElementById('copyButton').style.display = 'none'; // Hide Copy button again
