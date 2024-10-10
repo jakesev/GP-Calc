@@ -8,10 +8,10 @@ function cleanNumber(value) {
     return value.replace(/[$,%]/g, '').replace(/,/g, '');
 }
 
-// Function to format input with symbols (like $, %)
+// Function to add currency or percentage sign dynamically to inputs
 function formatWithSymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
-        let cleanValue = cleanNumber(inputField.value); // Remove existing commas and symbols
+        let cleanValue = cleanNumber(inputField.value); // Clean any symbols before reapplying
         if (!isNaN(cleanValue) && cleanValue !== '') {
             // Apply the symbol and re-add commas
             inputField.value = symbol + formatNumberWithCommas(cleanValue);
@@ -25,13 +25,13 @@ function formatWithSymbol(inputField, symbol) {
 formatWithSymbol(document.getElementById('inputRevenue'), '$');
 formatWithSymbol(document.getElementById('inputCost'), '$');
 
-// Adding percentage symbol formatting for GP % field
+// Adding percentage symbol to the **start** for GP % input field
 document.getElementById('inputPercentage').addEventListener('input', function () {
     let cleanValue = cleanNumber(document.getElementById('inputPercentage').value);
     if (!isNaN(cleanValue) && cleanValue !== '') {
-        document.getElementById('inputPercentage').value = cleanValue + '%';
+        document.getElementById('inputPercentage').value = '%' + cleanValue; // Prefix the percentage symbol
     } else {
-        document.getElementById('inputPercentage').value = '';
+        document.getElementById('inputPercentage').value = '%'; // Reset to just the percentage symbol
     }
 });
 
