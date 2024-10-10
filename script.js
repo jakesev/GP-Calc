@@ -80,9 +80,23 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
 });
 
-// Copy functionality when button is clicked
+// Function to show the notification for a set duration
+function showNotification(message, duration = 3000) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message; // Set the message
+    notification.classList.remove('hidden');
+    notification.classList.add('show');
+    
+    // Automatically hide the notification after the specified duration
+    setTimeout(() => {
+        notification.classList.remove('show');
+        notification.classList.add('hidden');
+    }, duration);
+}
+
+// Copy functionality when the copy button is clicked
 document.getElementById('copyButton').addEventListener('click', function () {
-    const discountValue = this.getAttribute('data-discount'); // Get the stored discount value with 2 decimal places
+    const discountValue = this.getAttribute('data-discount'); // Get the stored discount value
 
     // Create a temporary text area to copy the value
     const tempTextArea = document.createElement('textarea');
@@ -92,5 +106,6 @@ document.getElementById('copyButton').addEventListener('click', function () {
     document.execCommand('copy');
     document.body.removeChild(tempTextArea);
 
-    alert('Discount value copied: ' + discountValue);
+    // Show the notification with the copied message
+    showNotification(`Discount value copied: ${discountValue}`);
 });
