@@ -28,7 +28,7 @@ addCurrencySymbol(document.getElementById('inputCost'), '$');
 document.getElementById('inputPercentage').addEventListener('input', function () {
     let value = cleanNumber(document.getElementById('inputPercentage').value);
     if (!isNaN(value) && value !== '') {
-        document.getElementById('inputPercentage').value = "%"+ value ;
+        document.getElementById('inputPercentage').value = '%' + value;
     } else {
         document.getElementById('inputPercentage').value = '';
     }
