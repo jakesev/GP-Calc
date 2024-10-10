@@ -31,7 +31,7 @@ document.getElementById('inputPercentage').addEventListener('input', function ()
 
     // Apply % at the start, and prevent it from moving
     if (!isNaN(cleanValue) && cleanValue !== '') {
-        inputField.value = '%' + cleanValue;
+        inputField.value = cleanValue;
         // Keep the cursor at the right position (right after the number)
         inputField.setSelectionRange(inputField.value.length, inputField.value.length);
     } else {
