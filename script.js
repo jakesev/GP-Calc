@@ -1,50 +1,27 @@
-// Function to format numbers with commas
-function formatNumberWithCommas(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-// Function to remove commas and symbols before parsing
+// Function to remove any non-numeric characters except the decimal point
 function cleanNumber(value) {
-    return value.replace(/[$,%]/g, '').replace(/,/g, '');
+    // Remove any characters that are not digits or a single decimal point
+    return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-// Function to add currency or percentage sign dynamically to inputs
-function formatWithSymbol(inputField, symbol) {
+// Function to add input validation on keyup to ensure only numbers and decimal points are allowed
+function validateNumericInput(inputField) {
     inputField.addEventListener('input', function () {
-        let cleanValue = cleanNumber(inputField.value); // Clean any symbols before reapplying
-        if (!isNaN(cleanValue) && cleanValue !== '') {
-            inputField.value = symbol + formatNumberWithCommas(cleanValue);
-        } else {
-            inputField.value = symbol; // Reset to just the symbol if empty
-        }
+        let cleanValue = cleanNumber(inputField.value);
+        inputField.value = cleanValue; // Update the input field with the cleaned value
     });
 }
 
-// Adding dollar symbol and comma formatting for Revenue and Cost fields
-formatWithSymbol(document.getElementById('inputRevenue'), '$');
-formatWithSymbol(document.getElementById('inputCost'), '$');
-
-// Handling the GP% input field so that % stays at the start
-document.getElementById('inputPercentage').addEventListener('input', function () {
-    let inputField = document.getElementById('inputPercentage');
-    let cleanValue = cleanNumber(inputField.value); // Remove % and commas
-
-    // Apply % at the start, and prevent it from moving
-    if (!isNaN(cleanValue) && cleanValue !== '') {
-        inputField.value = '%' + cleanValue;
-        // Keep the cursor at the right position (right after the number)
-        inputField.setSelectionRange(inputField.value.length, inputField.value.length);
-    } else {
-        inputField.value = '%'; // Reset to just the percentage symbol
-        inputField.setSelectionRange(1, 1); // Keep cursor right after %
-    }
-});
+// Apply validation to the input fields
+validateNumericInput(document.getElementById('inputRevenue'));
+validateNumericInput(document.getElementById('inputCost'));
+validateNumericInput(document.getElementById('inputPercentage'));
 
 // Calculation function
 document.getElementById('calculateButton').addEventListener('click', function () {
-    const revenue = parseFloat(cleanNumber(document.getElementById('inputRevenue').value));
-    const cost = parseFloat(cleanNumber(document.getElementById('inputCost').value));
-    const percentage = parseFloat(cleanNumber(document.getElementById('inputPercentage').value));
+    const revenue = parseFloat(document.getElementById('inputRevenue').value);
+    const cost = parseFloat(document.getElementById('inputCost').value);
+    const percentage = parseFloat(document.getElementById('inputPercentage').value);
 
     if (isNaN(revenue) || isNaN(cost) || isNaN(percentage)) {
         alert('Please enter valid numbers');
@@ -88,7 +65,7 @@ document.getElementById('copyButton').addEventListener('click', function () {
     const discountValue = this.getAttribute('data-discount'); // Get the stored discount value with 2 decimal places
 
     // Create a temporary text area to copy the value
-    const tempTextArea = document.createElement('textarea');
+       const tempTextArea = document.createElement('textarea');
     tempTextArea.value = discountValue;
     document.body.appendChild(tempTextArea);
     tempTextArea.select();
