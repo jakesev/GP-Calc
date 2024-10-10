@@ -79,8 +79,8 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     copyButton.style.display = 'inline-block'; // Ensure the button is visible
     copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
 
-    // Show the Clear button when Copy button is visible
-    document.getElementById('clearButton').style.display = 'block';
+    // Show the Clear button below the Copy button when Copy button is visible
+    document.getElementById('clearButton').style.display = 'inline-block';
 });
 
 // Copy functionality when button is clicked
