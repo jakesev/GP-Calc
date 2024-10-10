@@ -3,11 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
+    <title>GP Adjuster</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to My GitHub Page!</h1>
-    <p>This is a simple webpage hosted on GitHub Pages.</p>
+
+    <div class="container">
+        <!-- Title -->
+        <h1 id="title">GP Adjuster</h1>
+
+        <!-- Separator -->
+        <hr class="separator">
+
+        <!-- Revenue Input -->
+        <div class="input-group">
+            <label for="inputRevenue">Enter Revenue ($)</label>
+            <input type="text" id="inputRevenue" placeholder="Enter Revenue ($)">
+        </div>
+
+        <!-- Cost Input -->
+        <div class="input-group">
+            <label for="inputCost">Enter Cost ($)</label>
+            <input type="text" id="inputCost" placeholder="Enter Cost ($)">
+        </div>
+
+        <!-- GP % Input -->
+        <div class="input-group">
+            <label for="inputPercentage">Enter Desired GP %</label>
+            <input type="text" id="inputPercentage" placeholder="Enter Desired GP %">
+        </div>
+
+        <!-- Calculate Button -->
+        <button id="calculateButton">Calculate</button>
+
+        <!-- Adjusted Revenue Result -->
+        <p id="resultAdjustedRevenue"></p>
+
+        <!-- Change (Increase/Decrease) Result -->
+        <p id="resultChange"></p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
