@@ -3,37 +3,49 @@ function formatNumberWithCommas(value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// Function to remove commas from the formatted number
-function removeCommas(value) {
-    return value.replace(/,/g, '');
+// Function to remove commas and symbols before parsing
+function cleanNumber(value) {
+    return value.replace(/[$,%]/g, '').replace(/,/g, '');
 }
 
-// Add comma separators to an input field while typing
-function applyCommaSeparator(inputField) {
+// Function to add currency sign dynamically to inputs
+function addCurrencySymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
-        let value = removeCommas(inputField.value); // Remove commas before re-formatting
+        let value = cleanNumber(inputField.value); // Clean any symbols before reapplying
         if (!isNaN(value) && value !== '') {
-            inputField.value = formatNumberWithCommas(value);
+            inputField.value = symbol + formatNumberWithCommas(value);
+        } else {
+            inputField.value = symbol; // Reset if empty or invalid
         }
     });
 }
 
-// Applying comma separator for revenue and cost input fields
-applyCommaSeparator(document.getElementById('inputRevenue'));
-applyCommaSeparator(document.getElementById('inputCost'));
+// Applying dollar sign and comma separator for Revenue and Cost inputs
+addCurrencySymbol(document.getElementById('inputRevenue'), '$');
+addCurrencySymbol(document.getElementById('inputCost'), '$');
 
-// Calculation logic
+// Applying percentage symbol for GP % input
+document.getElementById('inputPercentage').addEventListener('input', function () {
+    let value = cleanNumber(document.getElementById('inputPercentage').value);
+    if (!isNaN(value) && value !== '') {
+        document.getElementById('inputPercentage').value = value + '%';
+    } else {
+        document.getElementById('inputPercentage').value = '';
+    }
+});
+
+// Calculation function
 document.getElementById('calculateButton').addEventListener('click', function () {
-    const revenue = parseFloat(removeCommas(document.getElementById('inputRevenue').value));
-    const cost = parseFloat(removeCommas(document.getElementById('inputCost').value));
-    const percentage = parseFloat(document.getElementById('inputPercentage').value);
+    const revenue = parseFloat(cleanNumber(document.getElementById('inputRevenue').value));
+    const cost = parseFloat(cleanNumber(document.getElementById('inputCost').value));
+    const percentage = parseFloat(cleanNumber(document.getElementById('inputPercentage').value));
 
     if (isNaN(revenue) || isNaN(cost) || isNaN(percentage)) {
         alert('Please enter valid numbers');
         return;
     }
 
-    // Calculate adjusted revenue and the change
+    // Calculate adjusted revenue and change
     const margin = percentage / 100;
     const adjustedRevenue = cost / (1 - margin);
     const change = adjustedRevenue - revenue;
