@@ -8,29 +8,35 @@ function cleanNumber(value) {
     return value.replace(/[$,%]/g, '').replace(/,/g, '');
 }
 
-// Function to add currency sign dynamically to inputs
-function addCurrencySymbol(inputField, symbol) {
+// Function to add currency or percentage sign dynamically to inputs
+function formatWithSymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
-        let value = cleanNumber(inputField.value); // Clean any symbols before reapplying
-        if (!isNaN(value) && value !== '') {
-            inputField.value = symbol + formatNumberWithCommas(value);
+        let cleanValue = cleanNumber(inputField.value); // Clean any symbols before reapplying
+        if (!isNaN(cleanValue) && cleanValue !== '') {
+            inputField.value = symbol + formatNumberWithCommas(cleanValue);
         } else {
-            inputField.value = symbol; // Reset if empty or invalid
+            inputField.value = symbol; // Reset to just the symbol if empty
         }
     });
 }
 
-// Applying dollar sign and comma separator for Revenue and Cost inputs
-addCurrencySymbol(document.getElementById('inputRevenue'), '$');
-addCurrencySymbol(document.getElementById('inputCost'), '$');
+// Adding dollar symbol and comma formatting for Revenue and Cost fields
+formatWithSymbol(document.getElementById('inputRevenue'), '$');
+formatWithSymbol(document.getElementById('inputCost'), '$');
 
-// Applying percentage symbol for GP % input
+// Handling the GP% input field so that % stays at the start
 document.getElementById('inputPercentage').addEventListener('input', function () {
-    let value = cleanNumber(document.getElementById('inputPercentage').value);
-    if (!isNaN(value) && value !== '') {
-        document.getElementById('inputPercentage').value = '%' + value;
+    let inputField = document.getElementById('inputPercentage');
+    let cleanValue = cleanNumber(inputField.value); // Remove % and commas
+
+    // Apply % at the start, and prevent it from moving
+    if (!isNaN(cleanValue) && cleanValue !== '') {
+        inputField.value = '%' + cleanValue;
+        // Keep the cursor at the right position (right after the number)
+        inputField.setSelectionRange(inputField.value.length, inputField.value.length);
     } else {
-        document.getElementById('inputPercentage').value = '';
+        inputField.value = '%'; // Reset to just the percentage symbol
+        inputField.setSelectionRange(1, 1); // Keep cursor right after %
     }
 });
 
@@ -66,4 +72,24 @@ document.getElementById('calculateButton').addEventListener('click', function ()
     } else {
         document.getElementById('resultChange').textContent = 'No adjustment needed';
     }
+
+    // Show Copy Button and Assign the Clean Discount Value
+    const copyButton = document.getElementById('copyButton');
+    copyButton.style.display = 'inline-block'; // Show the button
+    copyButton.value = cleanNumber(change.toString()); // Store the clean value without symbols or commas
+});
+
+// Copy Functionality
+document.getElementById('copyButton').addEventListener('click', function () {
+    const cleanValue = this.value;
+    
+    // Create a temporary text area to copy the value
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = cleanValue;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextArea);
+
+    alert('Discount value copied: ' + cleanValue);
 });
