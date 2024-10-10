@@ -26,12 +26,17 @@ formatWithSymbol(document.getElementById('inputRevenue'), '$');
 formatWithSymbol(document.getElementById('inputCost'), '$');
 
 // Adding percentage symbol to the **start** for GP % input field
-document.getElementById('inputPercentage').addEventListener('input', function () {
-    let cleanValue = cleanNumber(document.getElementById('inputPercentage').value);
+document.getElementById('inputPercentage').addEventListener('input', function (e) {
+    // Remove the % and commas for proper number input handling
+    let inputField = document.getElementById('inputPercentage');
+    let cleanValue = cleanNumber(inputField.value);
+
     if (!isNaN(cleanValue) && cleanValue !== '') {
-        document.getElementById('inputPercentage').value = '%' + cleanValue; // Prefix the percentage symbol
+        inputField.value = '%' + cleanValue; // Ensure % is always at the beginning
+        // Move the cursor to the correct position (after the number) 
+        inputField.setSelectionRange(inputField.value.length, inputField.value.length);
     } else {
-        document.getElementById('inputPercentage').value = '%'; // Reset to just the percentage symbol
+        inputField.value = '%'; // Reset to just the percentage symbol
     }
 });
 
