@@ -8,27 +8,28 @@ function cleanNumber(value) {
     return value.replace(/[$,%]/g, '').replace(/,/g, '');
 }
 
-// Function to add currency sign dynamically to inputs
-function addCurrencySymbol(inputField, symbol) {
+// Function to format input with symbols (like $, %)
+function formatWithSymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
-        let value = cleanNumber(inputField.value); // Clean any symbols before reapplying
-        if (!isNaN(value) && value !== '') {
-            inputField.value = symbol + formatNumberWithCommas(value);
+        let cleanValue = cleanNumber(inputField.value); // Remove existing commas and symbols
+        if (!isNaN(cleanValue) && cleanValue !== '') {
+            // Apply the symbol and re-add commas
+            inputField.value = symbol + formatNumberWithCommas(cleanValue);
         } else {
-            inputField.value = symbol; // Reset if empty or invalid
+            inputField.value = symbol; // Reset to just the symbol if empty
         }
     });
 }
 
-// Applying dollar sign and comma separator for Revenue and Cost inputs
-addCurrencySymbol(document.getElementById('inputRevenue'), '$');
-addCurrencySymbol(document.getElementById('inputCost'), '$');
+// Adding dollar symbol and comma formatting for Revenue and Cost fields
+formatWithSymbol(document.getElementById('inputRevenue'), '$');
+formatWithSymbol(document.getElementById('inputCost'), '$');
 
-// Applying percentage symbol for GP % input
+// Adding percentage symbol formatting for GP % field
 document.getElementById('inputPercentage').addEventListener('input', function () {
-    let value = cleanNumber(document.getElementById('inputPercentage').value);
-    if (!isNaN(value) && value !== '') {
-        document.getElementById('inputPercentage').value = value + '%';
+    let cleanValue = cleanNumber(document.getElementById('inputPercentage').value);
+    if (!isNaN(cleanValue) && cleanValue !== '') {
+        document.getElementById('inputPercentage').value = cleanValue + '%';
     } else {
         document.getElementById('inputPercentage').value = '';
     }
