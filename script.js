@@ -1,6 +1,36 @@
+// Function to format numbers with commas
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Function to remove commas before parsing to a float
+function removeCommas(number) {
+    return number.replace(/,/g, '');
+}
+
+// Event listener to add comma separators as user types
+function addCommaSeparatorsToInput(inputField) {
+    inputField.addEventListener('input', function (e) {
+        const value = inputField.value.replace(/,/g, '');
+        if (!isNaN(value) && value !== '') {
+            inputField.value = formatNumberWithCommas(value);
+        }
+    });
+}
+
+// Add comma separators to revenue and cost inputs
+document.getElementById('inputRevenue').addEventListener('input', function () {
+    addCommaSeparatorsToInput(this);
+});
+
+document.getElementById('inputCost').addEventListener('input', function () {
+    addCommaSeparatorsToInput(this);
+});
+
+// Calculation function
 document.getElementById('calculateButton').addEventListener('click', function() {
-    const revenue = parseFloat(document.getElementById('inputRevenue').value.replace(/,/g, ''));
-    const cost = parseFloat(document.getElementById('inputCost').value.replace(/,/g, ''));
+    const revenue = parseFloat(removeCommas(document.getElementById('inputRevenue').value));
+    const cost = parseFloat(removeCommas(document.getElementById('inputCost').value));
     const percentage = parseFloat(document.getElementById('inputPercentage').value);
 
     if (isNaN(revenue) || isNaN(cost) || isNaN(percentage)) {
