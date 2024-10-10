@@ -13,7 +13,6 @@ function formatWithSymbol(inputField, symbol) {
     inputField.addEventListener('input', function () {
         let cleanValue = cleanNumber(inputField.value); // Clean any symbols before reapplying
         if (!isNaN(cleanValue) && cleanValue !== '') {
-            // Apply the symbol and re-add commas
             inputField.value = symbol + formatNumberWithCommas(cleanValue);
         } else {
             inputField.value = symbol; // Reset to just the symbol if empty
@@ -25,18 +24,19 @@ function formatWithSymbol(inputField, symbol) {
 formatWithSymbol(document.getElementById('inputRevenue'), '$');
 formatWithSymbol(document.getElementById('inputCost'), '$');
 
-// Adding percentage symbol to the **start** for GP % input field
-document.getElementById('inputPercentage').addEventListener('input', function (e) {
-    // Remove the % and commas for proper number input handling
+// Handling the GP% input field so that % stays at the start
+document.getElementById('inputPercentage').addEventListener('input', function () {
     let inputField = document.getElementById('inputPercentage');
-    let cleanValue = cleanNumber(inputField.value);
+    let cleanValue = cleanNumber(inputField.value); // Remove % and commas
 
+    // Apply % at the start, and prevent it from moving
     if (!isNaN(cleanValue) && cleanValue !== '') {
-        inputField.value = '%' + cleanValue; // Ensure % is always at the beginning
-        // Move the cursor to the correct position (after the number) 
+        inputField.value = '%' + cleanValue;
+        // Keep the cursor at the right position (right after the number)
         inputField.setSelectionRange(inputField.value.length, inputField.value.length);
     } else {
         inputField.value = '%'; // Reset to just the percentage symbol
+        inputField.setSelectionRange(1, 1); // Keep cursor right after %
     }
 });
 
