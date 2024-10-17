@@ -121,5 +121,3 @@ document.getElementById('clearButton').addEventListener('click', function () {
     document.getElementById('copyButton').style.display = 'none'; // Hide Copy button again
     this.style.display = 'none'; // Hide Clear button itself
 });
-
-</html>
