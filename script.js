@@ -1,4 +1,3 @@
-inject it for me in here:
 // Function to format numbers with commas
 function formatNumberWithCommas(value) {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -122,3 +121,5 @@ document.getElementById('clearButton').addEventListener('click', function () {
     document.getElementById('copyButton').style.display = 'none'; // Hide Copy button again
     this.style.display = 'none'; // Hide Clear button itself
 });
+
+</html>
