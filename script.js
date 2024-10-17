@@ -33,9 +33,9 @@ function formatPercentageInput(inputField) {
     });
 }
 
-// Function to round to the nearest $10
+// Function to round up to the nearest $10
 function roundToNearestTen(value) {
-    return Math.round(value / 10) * 10;
+    return Math.ceil(value / 10) * 10;
 }
 
 // Apply formatting to the input fields
@@ -54,35 +54,31 @@ document.getElementById('calculateButton').addEventListener('click', function ()
         return;
     }
 
-    // Calculate adjusted revenue and change
+    // Calculate adjusted revenue based on given margin
     const margin = percentage / 100;
     let adjustedRevenue = cost / (1 - margin);
-    let change = adjustedRevenue - revenue;
 
-    // Round both values to the nearest $10
-    adjustedRevenue = roundToNearestTen(adjustedRevenue);
-    change = roundToNearestTen(change);
+    // Round adjusted revenue to nearest $10
+    const roundedAdjustedRevenue = roundToNearestTen(adjustedRevenue);
+
+    // Adjust the discount so that the adjusted revenue matches the nearest $10
+    const adjustedMargin = 1 - (cost / roundedAdjustedRevenue);
+    const newPercentage = adjustedMargin * 100;
+
+    // Calculate the difference/change
+    const change = roundedAdjustedRevenue - revenue;
 
     // Format numbers with commas
     const formatCurrency = (num) => {
         return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     };
 
-    // Display adjusted revenue
-    document.getElementById('resultAdjustedRevenue').textContent = `Adjusted Revenue: ${formatCurrency(adjustedRevenue)}`;
-
-    // Display change result
-    const copyButton = document.getElementById('copyButton'); // Copy button reference
-
-    if (change > 0) {
-        document.getElementById('resultChange').textContent = `Increase by: ${formatCurrency(change)}`;
-    } else if (change < 0) {
-        document.getElementById('resultChange').textContent = `Decrease by: -${formatCurrency(Math.abs(change))}`;
-    } else {
-        document.getElementById('resultChange').textContent = 'No adjustment needed';
-    }
+    // Display adjusted revenue and new percentage
+    document.getElementById('resultAdjustedRevenue').textContent = `Adjusted Revenue: ${formatCurrency(roundedAdjustedRevenue)}`;
+    document.getElementById('resultChange').textContent = `New GP %: ${newPercentage.toFixed(2)}%`;
 
     // Show the Copy Button and assign the clean discount value (with 2 decimal places)
+    const copyButton = document.getElementById('copyButton'); // Copy button reference
     copyButton.style.display = 'inline-block'; // Ensure the button is visible
     copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
 
