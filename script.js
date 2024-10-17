@@ -33,6 +33,11 @@ function formatPercentageInput(inputField) {
     });
 }
 
+// Function to round to the nearest $10
+function roundToNearestTen(value) {
+    return Math.round(value / 10) * 10;
+}
+
 // Apply formatting to the input fields
 formatCurrencyInput(document.getElementById('inputRevenue'));
 formatCurrencyInput(document.getElementById('inputCost'));
@@ -51,8 +56,12 @@ document.getElementById('calculateButton').addEventListener('click', function ()
 
     // Calculate adjusted revenue and change
     const margin = percentage / 100;
-    const adjustedRevenue = cost / (1 - margin);
-    const change = adjustedRevenue - revenue;
+    let adjustedRevenue = cost / (1 - margin);
+    let change = adjustedRevenue - revenue;
+
+    // Round both values to the nearest $10
+    adjustedRevenue = roundToNearestTen(adjustedRevenue);
+    change = roundToNearestTen(change);
 
     // Format numbers with commas
     const formatCurrency = (num) => {
