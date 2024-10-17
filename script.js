@@ -54,33 +54,32 @@ document.getElementById('calculateButton').addEventListener('click', function ()
         return;
     }
 
-    // Calculate adjusted revenue based on given margin
+    // Calculate initial adjusted revenue based on given margin
     const margin = percentage / 100;
     let adjustedRevenue = cost / (1 - margin);
 
     // Round adjusted revenue to nearest $10
     const roundedAdjustedRevenue = roundToNearestTen(adjustedRevenue);
 
-    // Adjust the discount so that the adjusted revenue matches the nearest $10
-    const adjustedMargin = 1 - (cost / roundedAdjustedRevenue);
-    const newPercentage = adjustedMargin * 100;
+    // Calculate the discount needed to reach the rounded adjusted revenue
+    const discount = adjustedRevenue - roundedAdjustedRevenue;
 
-    // Calculate the difference/change
-    const change = roundedAdjustedRevenue - revenue;
-
-    // Format numbers with commas
+    // Display adjusted revenue and discount
     const formatCurrency = (num) => {
         return num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     };
 
-    // Display adjusted revenue and new percentage
     document.getElementById('resultAdjustedRevenue').textContent = `Adjusted Revenue: ${formatCurrency(roundedAdjustedRevenue)}`;
-    document.getElementById('resultChange').textContent = `New GP %: ${newPercentage.toFixed(2)}%`;
+    if (discount !== 0) {
+        document.getElementById('resultChange').textContent = `Discount Applied: ${formatCurrency(discount)}`;
+    } else {
+        document.getElementById('resultChange').textContent = 'No Discount Applied';
+    }
 
     // Show the Copy Button and assign the clean discount value (with 2 decimal places)
     const copyButton = document.getElementById('copyButton'); // Copy button reference
     copyButton.style.display = 'inline-block'; // Ensure the button is visible
-    copyButton.setAttribute('data-discount', Math.abs(change).toFixed(2)); // Store the clean number with 2 decimal places
+    copyButton.setAttribute('data-discount', Math.abs(discount).toFixed(2)); // Store the clean number with 2 decimal places
 
     // Show the Clear button below the Copy button when Copy button is visible
     document.getElementById('clearButton').style.display = 'inline-block';
